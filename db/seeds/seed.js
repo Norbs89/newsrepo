@@ -15,8 +15,20 @@ exports.seed = function(knex) {
     .insert(userData)
     .returning("*");
 
-  return Promise.all([topicsInsertions, usersInsertions]).then(mystery => {
-    console.log(mystery);
+  const formattedArticles = formatDates(articleData);
+  const articleInsertions = knex("articles")
+    .insert(formattedArticles)
+    .returning("*")
+    .then(articleRows => {
+      console.log(articleRows);
+    });
+
+  return Promise.all([
+    topicsInsertions,
+    usersInsertions,
+    articleInsertions
+  ]).then(([topicRows, userRows, articleRows]) => {
+    console.log(articleRows);
     /*
 
       Your article data is currently in the incorrect format and will violate your SQL schema.
