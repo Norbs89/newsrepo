@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  console.log("creating topics table...");
+  console.log("up function is working on TOPICS");
   return knex.schema.createTable("topics", topicsTable => {
     topicsTable.string("slug").primary();
     topicsTable.string("description").notNullable();
