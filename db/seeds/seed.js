@@ -26,7 +26,7 @@ exports.seed = function(knex) {
     usersInsertions,
     articleInsertions
   ]).then(([topicRows, userRows, articleRows]) => {
-    console.log(articleRows);
+    console.log(topicRows);
   });
   // .then(articleRows => {
   //   /*
