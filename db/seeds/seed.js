@@ -7,6 +7,8 @@ const {
 
 const { formatDates, formatComments, makeRefObj } = require("../utils/utils");
 
+const formattedArticles = formatDates(articleData);
+
 exports.seed = function(knex) {
   const topicsInsertions = knex("topics")
     .insert(topicData)
@@ -15,13 +17,9 @@ exports.seed = function(knex) {
     .insert(userData)
     .returning("*");
 
-  const formattedArticles = formatDates(articleData);
   const articleInsertions = knex("articles")
     .insert(formattedArticles)
-    .returning("*")
-    .then(articleRows => {
-      console.log(articleRows);
-    });
+    .returning("*");
 
   return Promise.all([
     topicsInsertions,
@@ -29,14 +27,6 @@ exports.seed = function(knex) {
     articleInsertions
   ]).then(([topicRows, userRows, articleRows]) => {
     console.log(articleRows);
-    /*
-
-      Your article data is currently in the incorrect format and will violate your SQL schema.
-
-      You will need to write and test the provided formatDate utility function to be able insert your article data.
-
-      Your comment insertions will depend on information from the seeded articles, so make sure to return the data after it's been seeded.
-      */
   });
   // .then(articleRows => {
   //   /*
