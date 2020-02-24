@@ -1,4 +1,5 @@
 const ENV = process.env.NODE_ENV || "development";
+const { dbDevConfig, dbTestConfig } = require("./dbConfig");
 
 const baseConfig = {
   client: "pg",
@@ -12,18 +13,10 @@ const baseConfig = {
 
 const customConfig = {
   development: {
-    connection: {
-      database: "nc_news",
-      username: "norbs89",
-      password: "password"
-    }
+    connection: dbDevConfig
   },
   test: {
-    connection: {
-      database: "nc_news_test",
-      username: "norbs89",
-      password: "password"
-    }
+    connection: dbTestConfig
   }
 };
 
