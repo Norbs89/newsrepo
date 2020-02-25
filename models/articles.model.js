@@ -21,8 +21,14 @@ const fetchArticleById = article_id => {
     });
 };
 
-// knex("users")
-//   .join("contacts", "users.id", "=", "contacts.user_id")
-//   .select("users.id", "contacts.phone");
+const patchVotes = (article_id, count) => {
+  return connection("articles")
+    .where("article_id", article_id)
+    .increment("votes", count)
+    .returning("*")
+    .then(article => {
+      return article;
+    });
+};
 
-module.exports = fetchArticleById;
+module.exports = { fetchArticleById, patchVotes };

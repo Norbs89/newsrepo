@@ -58,6 +58,25 @@ describe("/api", () => {
           expect(res.body.article[0].article_id).to.equal(1);
         });
     });
-    it("PATCH:201 - Responds with an article object with the updated votes number, based on the received PATCH request", () => {});
+    it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 10 })
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.article[0].votes).to.equal(110);
+        });
+    });
+    it("PATCH:200 - the request works for negative numbers too", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: -10 })
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.article[0].votes).to.equal(90);
+        });
+    });
   });
 });
