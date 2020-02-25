@@ -40,7 +40,7 @@ describe("/api", () => {
     });
   });
   describe("/articles/:article_id", () => {
-    it("Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
+    it("GET:200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
       return request(app)
         .get("/api/articles/1")
         .then(res => {
@@ -55,7 +55,9 @@ describe("/api", () => {
             "votes",
             "comment_count"
           );
+          expect(res.body.article[0].article_id).to.equal(1);
         });
     });
+    it("PATCH:201 - Responds with an article object with the updated votes number, based on the received PATCH request", () => {});
   });
 });

@@ -4,7 +4,7 @@ const getArticleById = (req, res, next) => {
   const article_id = req.params.article_id;
 
   fetchArticleById(article_id).then(article => {
-    // console.log(article);
+    res.send({ article });
   });
 };
 
