@@ -40,6 +40,22 @@ describe("/api", () => {
     });
   });
   describe("/articles/:article_id", () => {
-    it("", () => {});
+    it("Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.article[0]).to.contain.keys(
+            "article_id",
+            "author",
+            "title",
+            "body",
+            "topic",
+            "created_at",
+            "votes",
+            "comment_count"
+          );
+        });
+    });
   });
 });

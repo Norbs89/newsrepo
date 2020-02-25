@@ -18,6 +18,7 @@ describe("formatDates", () => {
     const actual = formatDates(input);
     const expected = [{ a: 1, b: 2, created_at: correctDate }];
     expect(actual).to.eql(expected);
+    expect(input).to.eql([{ a: 1, b: 2, created_at: 1542284514171 }]);
   });
   it("converts a UNIX timestamp key in multiple array index objects, all other keys unchanged. ", () => {
     const input = [
@@ -33,6 +34,7 @@ describe("formatDates", () => {
       { a: 4, b: 3, created_at: correctDate }
     ];
     expect(actual).to.eql(expected);
+    expect(input[0]).to.eql({ a: 1, b: 2, created_at: 1542284514171 });
   });
 });
 
@@ -123,9 +125,16 @@ describe("formatComments", () => {
     ];
     const actual = formatComments(input, refObj);
     expect(actual).to.eql(expected);
+    expect(input[0]).to.eql({
+      body: "This is a bad article name",
+      belongs_to: "High Altitude Cooking",
+      created_by: "butter_bridge",
+      votes: 1,
+      created_at: 1542284514171
+    });
   });
 
-  it("returns an array of multiple formatted shops when passed an array, using the corresponding refObj key-value pairs", () => {
+  it("returns an array of multiple formatted comments when passed an array, using the corresponding refObj key-value pairs", () => {
     const input = [
       {
         body: "This is a bad article name",
@@ -162,5 +171,12 @@ describe("formatComments", () => {
     ];
     const actual = formatComments(input, refObj);
     expect(actual).to.eql(expected);
+    expect(input[0]).to.eql({
+      body: "This is a bad article name",
+      belongs_to: "High Altitude Cooking",
+      created_by: "butter_bridge",
+      votes: 1,
+      created_at: 1542284514171
+    });
   });
 });
