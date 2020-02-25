@@ -1,7 +1,11 @@
 const connection = require("../db/connection");
 
 const fetchAllTopics = () => {
-  console.log("in the model");
+  return connection("topics")
+    .select("*")
+    .then(res => {
+      return res;
+    });
 };
 
 module.exports = fetchAllTopics;

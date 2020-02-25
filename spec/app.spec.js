@@ -16,8 +16,8 @@ describe("/api", () => {
         .get("/api/topics")
         .expect(200)
         .then(res => {
-          expect(res.body).to.be.an("array");
-          res.body.forEach(topic => {
+          expect(res.body).to.be.an("object");
+          res.body.topics.forEach(topic => {
             expect(topic).to.contain.keys("slug", "description");
           });
         });

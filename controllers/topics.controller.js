@@ -1,6 +1,8 @@
+const fetchAllTopics = require("../models/topics.model");
+
 const getAllTopics = (req, res, next) => {
-  fetchAllTopics().then(res => {
-    console.log("in the controller");
+  fetchAllTopics().then(topics => {
+    res.send({ topics });
   });
 };
 
