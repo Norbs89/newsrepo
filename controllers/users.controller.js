@@ -1,7 +1,9 @@
+const fetchUser = require("../models/users.model");
+
 const getUser = (req, res, next) => {
   const { username } = req.params;
-  fetchUser(username).then(res => {
-    console.log("in the user controller");
+  fetchUser(username).then(user => {
+    res.send({ user });
   });
 };
 

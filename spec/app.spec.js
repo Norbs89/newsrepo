@@ -11,7 +11,7 @@ describe("/api", () => {
     return connection.seed.run();
   });
   describe("/topics", () => {
-    it("GET:200 - Responds with an array of topic objects, each having 'slug' & 'description' properties", () => {
+    it("GET:200 - Responds with an object containing an array of topics, each having 'slug' & 'description' properties", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
@@ -22,5 +22,24 @@ describe("/api", () => {
           });
         });
     });
+  });
+  describe("/users/:username", () => {
+    it("GET:200 - Responds with a user object which should have the following properties: username, avatar_url, name", () => {
+      return request(app)
+        .get("/api/users/icellusedkars")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.user[0]).to.contain.keys(
+            "username",
+            "avatar_url",
+            "name"
+          );
+          expect("icellusedkars").to.equal(res.body.user[0].username);
+        });
+    });
+  });
+  describe("/articles/:article_id", () => {
+    it("", () => {});
   });
 });
