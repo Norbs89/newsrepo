@@ -14,10 +14,14 @@ const fetchArticleById = article_id => {
       "articles.votes"
     )
     .then(commentsAndArticles => {
-      commentsAndArticles.forEach(
-        obj => (obj.comment_count = commentsAndArticles.length)
-      );
-      return commentsAndArticles;
+      if (commentsAndArticles.length === 0) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      } else {
+        commentsAndArticles.forEach(
+          obj => (obj.comment_count = commentsAndArticles.length)
+        );
+        return commentsAndArticles;
+      }
     });
 };
 

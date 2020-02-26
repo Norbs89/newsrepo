@@ -82,6 +82,14 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("Invalid request");
         });
     });
+    it("GET: 404 - responds with error message when given an article_id that doesn't exist", () => {
+      return request(app)
+        .get("/api/articles/99999")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("404, Not found!");
+        });
+    });
     it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
       return request(app)
         .patch("/api/articles/1")
@@ -100,6 +108,15 @@ describe("/api", () => {
         .then(res => {
           expect(res.body).to.be.an("object");
           expect(res.body.article[0].votes).to.equal(90);
+        });
+    });
+    it("PATCH: 400 - Throws an error when the patch request has an invalid value", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: "banana" })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid request");
         });
     });
   });
