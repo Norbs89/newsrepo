@@ -5,7 +5,8 @@ const pSQLErrors = (err, req, res, next) => {
       status: 400,
       msg: "Invalid request"
     },
-    23502: { status: 400, msg: "Value is missing or invalid data type" }
+    23502: { status: 400, msg: "Value is missing or invalid data type" },
+    23503: { status: 400, msg: "Value is missing or invalid data type" }
   };
   if (err.code) {
     res

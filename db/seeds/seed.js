@@ -32,7 +32,6 @@ exports.seed = function(knex) {
     })
     .then(articleRows => {
       const articleRef = makeRefObj(articleRows);
-      // console.log(articleRows);
       const formattedComments = formatComments(commentData, articleRef);
       return knex("comments").insert(formattedComments);
     });

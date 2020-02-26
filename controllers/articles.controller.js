@@ -35,9 +35,13 @@ const postComment = (req, res, next) => {
     body: req.body.body,
     article_id: article_id
   };
-  addComment(comment).then(comment => {
-    res.status(201).send({ comment });
-  });
+  addComment(comment)
+    .then(comment => {
+      res.status(201).send({ comment });
+    })
+    .catch(err => {
+      next(err);
+    });
 };
 
 module.exports = { getArticleById, changeVotes, postComment };

@@ -41,26 +41,13 @@ const patchVotes = (article_id, count) => {
 };
 
 const addComment = comment => {
-  return (
-    connection
-      .insert(comment)
-      .into("comments")
-      // .where("article_id", article_id)
-      .returning("*")
-      .then(postedComment => {
-        return postedComment[0].body;
-      })
-  );
+  return connection
+    .insert(comment)
+    .into("comments")
+    .returning("*")
+    .then(postedComment => {
+      return postedComment[0].body;
+    });
 };
-
-// const addNewTreasure = newTreasure => {
-//   return connection
-//     .insert(newTreasure)
-//     .into("treasures")
-//     .returning("*")
-//     .then(treasure => {
-//       return treasure[0];
-//     });
-// };
 
 module.exports = { fetchArticleById, patchVotes, addComment };

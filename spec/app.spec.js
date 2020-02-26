@@ -70,6 +70,47 @@ describe("/api", () => {
             expect(res.body).to.eql({ comment: "test comment" });
           });
       });
+      it("POST: 400 - Throws an error when the new comment request has an undefined value", () => {
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send({
+            username: undefined,
+            body: "test comment"
+          })
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(
+              "Value is missing or invalid data type"
+            );
+          });
+      });
+      it("POST: 400 - Throws an error when the new comment has an invalid value", () => {
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send({
+            username: "notValidUser",
+            body: "test comment"
+          })
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(
+              "Value is missing or invalid data type"
+            );
+          });
+      });
+      it("POST: 400 - Throws an error when the new comment has a missing key", () => {
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send({
+            username: "icellusedkars"
+          })
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal(
+              "Value is missing or invalid data type"
+            );
+          });
+      });
     });
     it("GET: 200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
       return request(app)
