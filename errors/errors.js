@@ -19,6 +19,9 @@ const pSQLErrors = (err, req, res, next) => {
 const customErrors = (err, req, res, next) => {
   if (err.status === 404) {
     res.status(404).send({ msg: "404, Not found!" });
+  }
+  if (err.status === 400) {
+    res.status(400).send({ msg: "Invalid request" });
   } else {
     next(err);
   }

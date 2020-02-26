@@ -119,6 +119,24 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("Invalid request");
         });
     });
+    it("PATCH: 404 - Throws an error when the patch request has been sent to a non existent article", () => {
+      return request(app)
+        .patch("/api/articles/9999")
+        .send({ inc_votes: 15 })
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("404, Not found!");
+        });
+    });
+    it("PATCH: 400 - Throws an error when the patch request is trying to patch a wrong article key", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ topic: 15 })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid request");
+        });
+    });
   });
   describe("Invalid Path", () => {
     it("sends a 404 when given a non-existent path", () => {

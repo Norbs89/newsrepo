@@ -26,12 +26,17 @@ const fetchArticleById = article_id => {
 };
 
 const patchVotes = (article_id, count) => {
+  if (count === undefined) {
+    return Promise.reject({ status: 400, msg: "Invalid request" });
+  }
   return connection("articles")
     .where("article_id", article_id)
     .increment("votes", count)
     .returning("*")
     .then(article => {
-      return article;
+      if (article.length === 0) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      } else return article;
     });
 };
 
