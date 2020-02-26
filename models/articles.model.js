@@ -74,8 +74,8 @@ const getAllArticles = query => {
     )
     .count({ comment_count: "comments.article_id" })
     .orderBy(query.sort_by || "created_at", query.order || "desc")
-    .then(mistery => {
-      console.log(mistery);
+    .then(articles => {
+      return articles;
     });
 };
 

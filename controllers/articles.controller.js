@@ -58,7 +58,9 @@ const sendCommentsByArticleId = (req, res, next) => {
 
 const sendAllArticles = (req, res, next) => {
   const query = req.query;
-  getAllArticles(query);
+  getAllArticles(query).then(articles => {
+    res.send({ articles });
+  });
 };
 
 module.exports = {
