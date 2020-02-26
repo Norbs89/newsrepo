@@ -38,6 +38,14 @@ describe("/api", () => {
           expect("icellusedkars").to.equal(res.body.user[0].username);
         });
     });
+    it("GET: 404 - responds with error message when given a username that doesn't exist", () => {
+      return request(app)
+        .get("/api/users/clearlyAWrongUsername")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("404, Not found!");
+        });
+    });
   });
   describe("/articles/:article_id", () => {
     it("GET:200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
@@ -76,6 +84,16 @@ describe("/api", () => {
         .then(res => {
           expect(res.body).to.be.an("object");
           expect(res.body.article[0].votes).to.equal(90);
+        });
+    });
+  });
+  describe("Invalid Path", () => {
+    it("sends a 404 when given a non-existent path", () => {
+      return request(app)
+        .get("/api/path-does-not-exist")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Route not found!");
         });
     });
   });
