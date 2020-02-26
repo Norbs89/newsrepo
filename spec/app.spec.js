@@ -78,6 +78,28 @@ describe("/api", () => {
           });
         });
     });
+    it("GET: 200 - responds with the filtered articles, specified by user query", () => {
+      return request(app)
+        .get("/api/articles?author=butter_bridge")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          res.body.articles.forEach(articles =>
+            expect(articles.author).to.eql("butter_bridge")
+          );
+        });
+    });
+    it("GET: 200 - responds with the filtered articles, specified by user query", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          res.body.articles.forEach(articles =>
+            expect(articles.topic).to.eql("mitch")
+          );
+        });
+    });
     describe("/:article_id", () => {
       describe("/comments", () => {
         it("GET: 200 - Responds with all comments for the given article_id. Can accept queries - be sorted by any column as well as order by asc or desc(default)", () => {

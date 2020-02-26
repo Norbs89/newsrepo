@@ -74,6 +74,14 @@ const getAllArticles = query => {
     )
     .count({ comment_count: "comments.article_id" })
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .modify(querySoFar => {
+      if (query.hasOwnProperty("author")) {
+        querySoFar.where("articles.author", query.author);
+      }
+      if (query.hasOwnProperty("topic")) {
+        querySoFar.where("articles.topic", query.topic);
+      }
+    })
     .then(articles => {
       return articles;
     });
