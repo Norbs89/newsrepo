@@ -2,9 +2,12 @@ const {
   getArticleById,
   changeVotes,
   postComment,
-  sendCommentsByArticleId
+  sendCommentsByArticleId,
+  sendAllArticles
 } = require("../controllers/articles.controller");
 const articlesRouter = require("express").Router();
+
+articlesRouter.route("/").get(sendAllArticles);
 
 articlesRouter
   .route("/:article_id")

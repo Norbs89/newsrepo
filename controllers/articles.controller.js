@@ -2,7 +2,8 @@ const {
   fetchArticleById,
   patchVotes,
   addComment,
-  getCommentsByArticleId
+  getCommentsByArticleId,
+  getAllArticles
 } = require("../models/articles.model");
 
 const getArticleById = (req, res, next) => {
@@ -55,9 +56,15 @@ const sendCommentsByArticleId = (req, res, next) => {
     });
 };
 
+const sendAllArticles = (req, res, next) => {
+  const query = req.query;
+  getAllArticles(query);
+};
+
 module.exports = {
   getArticleById,
   changeVotes,
   postComment,
-  sendCommentsByArticleId
+  sendCommentsByArticleId,
+  sendAllArticles
 };

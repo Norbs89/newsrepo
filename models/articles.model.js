@@ -60,9 +60,29 @@ const getCommentsByArticleId = (query, article_id) => {
     });
 };
 
+const getAllArticles = query => {
+  return connection("articles")
+    .join("comments", "comments.article_id", "=", "articles.article_id")
+    .groupBy("articles.article_id")
+    .select(
+      "articles.author",
+      "title",
+      "articles.article_id",
+      "topic",
+      "articles.created_at",
+      "articles.votes"
+    )
+    .count({ comment_count: "comments.article_id" })
+    .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .then(mistery => {
+      console.log(mistery);
+    });
+};
+
 module.exports = {
   fetchArticleById,
   patchVotes,
   addComment,
-  getCommentsByArticleId
+  getCommentsByArticleId,
+  getAllArticles
 };
