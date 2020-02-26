@@ -50,4 +50,19 @@ const addComment = comment => {
     });
 };
 
-module.exports = { fetchArticleById, patchVotes, addComment };
+const getCommentsByArticleId = (query, article_id) => {
+  return connection("comments")
+    .select("comment_id", "votes", "created_at", "author", "body")
+    .where("article_id", article_id)
+    .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .then(comments => {
+      return comments;
+    });
+};
+
+module.exports = {
+  fetchArticleById,
+  patchVotes,
+  addComment,
+  getCommentsByArticleId
+};

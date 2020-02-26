@@ -1,7 +1,8 @@
 const {
   fetchArticleById,
   patchVotes,
-  addComment
+  addComment,
+  getCommentsByArticleId
 } = require("../models/articles.model");
 
 const getArticleById = (req, res, next) => {
@@ -28,12 +29,10 @@ const changeVotes = (req, res, next) => {
 };
 
 const postComment = (req, res, next) => {
-  const article_id = req.params.article_id;
-  const author = req.body.username;
   const comment = {
-    author: author,
+    author: req.body.username,
     body: req.body.body,
-    article_id: article_id
+    article_id: req.params.article_id
   };
   addComment(comment)
     .then(comment => {
@@ -44,4 +43,18 @@ const postComment = (req, res, next) => {
     });
 };
 
-module.exports = { getArticleById, changeVotes, postComment };
+const sendCommentsByArticleId = (req, res, next) => {
+  const article_id = req.params.article_id;
+  const query = req.query;
+  getCommentsByArticleId(query, article_id).then(comments => {
+    console.log({ comments });
+    res.send({ comments });
+  });
+};
+
+module.exports = {
+  getArticleById,
+  changeVotes,
+  postComment,
+  sendCommentsByArticleId
+};

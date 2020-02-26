@@ -1,7 +1,9 @@
 process.env.NODE_ENV = "test";
 const request = require("supertest");
 const chai = require("chai");
+const chaiSorted = require("sams-chai-sorted");
 const { expect } = chai;
+chai.use(chaiSorted);
 const app = require("../app");
 const connection = require("../db/connection");
 
@@ -56,7 +58,25 @@ describe("/api", () => {
     });
   });
   describe("/articles/:article_id", () => {
-    describe("/comments", () => {
+    describe.only("/comments", () => {
+      it("GET: 200 - Responds with all comments for the given article_id. Can accept queries - be sorted by any column as well as order by asc or desc(default)", () => {
+        return request(app)
+          .get("/api/articles/1/comments?sort_by=author")
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.comments).to.be.sortedBy("author", {
+              descending: true
+            });
+            expect(res.body.comments[0]).to.contain.keys(
+              "comment_id",
+              "votes",
+              "created_at",
+              "author",
+              "body"
+            );
+          });
+      });
       it("POST: 201 - Inserts both the body and the username into the comments table based on the post request, responds with the posted comment", () => {
         return request(app)
           .post("/api/articles/1/comments")
