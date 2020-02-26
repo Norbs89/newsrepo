@@ -22,6 +22,14 @@ describe("/api", () => {
           });
         });
     });
+    it("405 Not Allowed - sends a 405 status error when trying to use invalid methods", () => {
+      return request(app)
+        .delete("/api/topics")
+        .expect(405)
+        .then(res => {
+          expect(res.body.msg).to.equal("Method not allowed!");
+        });
+    });
   });
   describe("/users/:username", () => {
     it("GET:200 - Responds with a user object which should have the following properties: username, avatar_url, name", () => {
@@ -64,6 +72,14 @@ describe("/api", () => {
             "comment_count"
           );
           expect(res.body.article[0].article_id).to.equal(1);
+        });
+    });
+    it("GET: 400 - responds with error message when the requested article_id input is an invalid input type", () => {
+      return request(app)
+        .get("/api/articles/notAnArticleId")
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid request");
         });
     });
     it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
