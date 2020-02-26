@@ -1,6 +1,6 @@
 const pSQLErrors = (err, req, res, next) => {
   const errorCodes = {
-    42703: { status: 400, msg: "Invalid input field" },
+    42703: { status: 400, msg: "Invalid query" },
     "22P02": {
       status: 400,
       msg: "Invalid request"

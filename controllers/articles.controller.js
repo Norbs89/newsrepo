@@ -46,10 +46,13 @@ const postComment = (req, res, next) => {
 const sendCommentsByArticleId = (req, res, next) => {
   const article_id = req.params.article_id;
   const query = req.query;
-  getCommentsByArticleId(query, article_id).then(comments => {
-    console.log({ comments });
-    res.send({ comments });
-  });
+  getCommentsByArticleId(query, article_id)
+    .then(comments => {
+      res.send({ comments });
+    })
+    .catch(err => {
+      next(err);
+    });
 };
 
 module.exports = {

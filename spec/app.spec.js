@@ -77,6 +77,25 @@ describe("/api", () => {
             );
           });
       });
+      it("GET: 200 - responds with all comments for the given article_id, ordered by user specified query", () => {
+        return request(app)
+          .get("/api/articles/1/comments?order=asc")
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.comments).to.be.sortedBy("created_at", {
+              descending: false
+            });
+          });
+      });
+      it("GET: 400 - Throws an error when trying to query a non-existent column", () => {
+        return request(app)
+          .get("/api/articles/1/comments?sort_by=banana")
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal("Invalid query");
+          });
+      });
       it("POST: 201 - Inserts both the body and the username into the comments table based on the post request, responds with the posted comment", () => {
         return request(app)
           .post("/api/articles/1/comments")
