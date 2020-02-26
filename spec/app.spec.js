@@ -56,7 +56,22 @@ describe("/api", () => {
     });
   });
   describe("/articles/:article_id", () => {
-    it("GET:200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
+    describe("/comments", () => {
+      it("POST: 201 - Inserts both the body and the username into the comments table based on the post request, responds with the posted comment", () => {
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send({
+            username: "icellusedkars",
+            body: "test comment"
+          })
+          .expect(201)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body).to.eql({ comment: "test comment" });
+          });
+      });
+    });
+    it("GET: 200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
       return request(app)
         .get("/api/articles/1")
         .then(res => {
