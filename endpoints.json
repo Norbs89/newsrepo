@@ -23,5 +23,54 @@
         }
       ]
     }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an array of requested user's details",
+    "queries": [],
+    "exampleResponse": {
+      "user": [
+        {
+          "username": "username",
+          "avatar_url": "www.prettyimages.com",
+          "name": "John Doe"
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an array of a requested article's details",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "article_id": 1,
+          "author": "username",
+          "title": "title",
+          "body": "article",
+          "topic": "slug",
+          "created_at": "date",
+          "votes": 0,
+          "comment_count": 0
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates the vote count by sending a body: {inc_votes: newVote}",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "article_id": 1,
+          "author": "username",
+          "title": "title",
+          "body": "article",
+          "topic": "slug",
+          "created_at": "date",
+          "votes": "(+ or - newVote)",
+          "comment_count": 0
+        }
+      ]
+    }
   }
 }

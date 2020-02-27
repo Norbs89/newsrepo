@@ -70,7 +70,7 @@ const getCommentsByArticleId = (query, article_id) => {
 
 const getAllArticles = query => {
   return connection("articles")
-    .join("comments", "comments.article_id", "=", "articles.article_id")
+    .join("comments", "comments.article_id", "=", "articles.article_id") //leftjoin here?
     .groupBy("articles.article_id")
     .select(
       "articles.author",

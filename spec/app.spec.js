@@ -12,6 +12,14 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
+  it.only("Responds with a JSON describing all endpoints on API", () => {
+    request(app)
+      .get("/api")
+      .expect(200)
+      .then(res => {
+        expect(res).to.be.an("object");
+      });
+  });
   describe("/comments", () => {
     describe("/:comment_id", () => {
       it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
