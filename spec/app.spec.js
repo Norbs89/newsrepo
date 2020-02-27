@@ -12,9 +12,29 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
-  describe("/comments", () => {
+  describe.only("/comments", () => {
     describe("/:comment_id", () => {
-      it("", () => {});
+      it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_votes: 10 })
+          .expect(200)
+          .then(res => {
+            console.log(res.body);
+            expect(res.body).to.be.an("object");
+            expect(res.body.comment[0].votes).to.equal(26);
+          });
+      });
+      it("PATCH:200 - the request works for negative numbers too", () => {
+        return request(app)
+          .patch("/api/comments/2")
+          .send({ inc_votes: -10 })
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.comment[0].votes).to.equal(4);
+          });
+      });
     });
   });
   describe("/topics", () => {
