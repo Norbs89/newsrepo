@@ -35,6 +35,33 @@ describe("/api", () => {
             expect(res.body.comment[0].votes).to.equal(4);
           });
       });
+      it("PATCH: 400 - Throws an error when the patch request has an invalid value", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_votes: "banana" })
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal("Invalid request");
+          });
+      });
+      it("PATCH: 404 - Throws an error when the patch request has been sent to a non existent comment", () => {
+        return request(app)
+          .patch("/api/comments/99999")
+          .send({ inc_votes: 15 })
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal("404, Not found!");
+          });
+      });
+      it("PATCH: 400 - Throws an error when the patch request is trying to patch a wrong article key", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ body: 15 })
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal("Invalid request");
+          });
+      });
     });
   });
   describe("/topics", () => {
