@@ -90,18 +90,33 @@ const getAllArticles = query => {
       }
     })
     .then(articles => {
-      if (articles.length === 0) {
-        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      if (query.hasOwnProperty("topic") || query.hasOwnProperty("author")) {
+        return Promise.all([
+          checkIfExists("users", "username", query.author),
+          checkIfExists("topics", "slug", query.topic),
+          articles
+        ]);
+      } else {
+        return [null, null, articles];
       }
-      return articles;
+    })
+    .then(([checkIfExists, checkIfExists2, articles]) => {
+      if (checkIfExists === false || checkIfExists2 === false) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      } else {
+        return articles;
+      }
     });
 };
 
-const checkIfExists = article_id => {
-  return connection("articles")
-    .where("article_id", article_id)
-    .then(article => {
-      if (article.length !== 0) {
+const checkIfExists = (table, column, value) => {
+  if (value === undefined) {
+    return true;
+  }
+  return connection(table)
+    .where(`${column}`, value)
+    .then(result => {
+      if (result.length !== 0) {
         return true;
       } else {
         return false;

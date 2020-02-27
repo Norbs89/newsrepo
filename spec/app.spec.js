@@ -12,7 +12,7 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
-  describe.only("/comments", () => {
+  describe("/comments", () => {
     describe("/:comment_id", () => {
       it("PATCH:200 - Responds with an article object with the updated votes, based on the received PATCH request", () => {
         return request(app)
@@ -109,8 +109,8 @@ describe("/api", () => {
         });
     });
   });
-  describe("/articles", () => {
-    it("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
+  describe.only("/articles", () => {
+    it.only("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
         .expect(200)
@@ -130,12 +130,13 @@ describe("/api", () => {
           });
         });
     });
-    it("GET: 200 - responds with the filtered articles, specified by user query", () => {
+    it.only("GET: 200 - responds with the filtered articles, specified by user query", () => {
       return request(app)
         .get("/api/articles?author=butter_bridge")
         .expect(200)
         .then(res => {
           expect(res.body).to.be.an("object");
+          // console.log(res.body);
           res.body.articles.forEach(articles =>
             expect(articles.author).to.eql("butter_bridge")
           );
@@ -160,12 +161,20 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("Invalid query");
         });
     });
-    it("GET: 404 - responds with error message when given a filter value that doesn't exist", () => {
+    it.only("GET: 404 - responds with error message when given a filter value that doesn't exist", () => {
       return request(app)
         .get("/api/articles?author=banana")
         .expect(404)
         .then(res => {
           expect(res.body.msg).to.equal("404, Not found!");
+        });
+    });
+    it.only("GET: 200 - responds with a 200 OK when given a filter value that's valid but does not have any articles associated with it", () => {
+      return request(app)
+        .get("/api/articles?author=lurker")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.eql([]);
         });
     });
     describe("/:article_id", () => {

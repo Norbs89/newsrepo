@@ -12,4 +12,4 @@ const sendUpdatedComment = (req, res, next) => {
     });
 };
 
-module.exports = sendUpdatedComment;
+module.exports = { sendUpdatedComment };
