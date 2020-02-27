@@ -20,7 +20,6 @@ describe("/api", () => {
           .send({ inc_votes: 10 })
           .expect(200)
           .then(res => {
-            console.log(res.body);
             expect(res.body).to.be.an("object");
             expect(res.body.comment[0].votes).to.equal(26);
           });
@@ -60,6 +59,22 @@ describe("/api", () => {
           .expect(400)
           .then(res => {
             expect(res.body.msg).to.equal("Invalid request");
+          });
+      });
+      it.only("DELETE: 202 - Delete a comment specified by the parameter(comment_id)", () => {
+        return request(app)
+          .delete("/api/comments/1")
+          .expect(202)
+          .then(res => {
+            expect(res.body.msg).to.equal("Delete request successful");
+          });
+      });
+      it.only("DELETE: 404 - Throws an error when trying to delete a non existent comment", () => {
+        return request(app)
+          .delete("/api/comments/99999")
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal("404, Not found!");
           });
       });
     });
@@ -109,8 +124,8 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/articles", () => {
-    it.only("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
+  describe("/articles", () => {
+    it("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
         .expect(200)
@@ -130,13 +145,12 @@ describe("/api", () => {
           });
         });
     });
-    it.only("GET: 200 - responds with the filtered articles, specified by user query", () => {
+    it("GET: 200 - responds with the filtered articles, specified by user query", () => {
       return request(app)
         .get("/api/articles?author=butter_bridge")
         .expect(200)
         .then(res => {
           expect(res.body).to.be.an("object");
-          // console.log(res.body);
           res.body.articles.forEach(articles =>
             expect(articles.author).to.eql("butter_bridge")
           );
@@ -161,7 +175,7 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("Invalid query");
         });
     });
-    it.only("GET: 404 - responds with error message when given a filter value that doesn't exist", () => {
+    it("GET: 404 - responds with error message when given a filter value that doesn't exist", () => {
       return request(app)
         .get("/api/articles?author=banana")
         .expect(404)
@@ -169,9 +183,17 @@ describe("/api", () => {
           expect(res.body.msg).to.equal("404, Not found!");
         });
     });
-    it.only("GET: 200 - responds with a 200 OK when given a filter value that's valid but does not have any articles associated with it", () => {
+    it("GET: 200 - responds with a 200 OK when given a filter value that's valid but does not have any articles associated with it", () => {
       return request(app)
         .get("/api/articles?author=lurker")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.eql([]);
+        });
+    });
+    it("GET: 200 - responds with a 200 OK when given a filter value that's valid but does not have any articles associated with it", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
         .expect(200)
         .then(res => {
           expect(res.body.articles).to.eql([]);

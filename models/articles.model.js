@@ -56,7 +56,10 @@ const getCommentsByArticleId = (query, article_id) => {
     .where("article_id", article_id)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
     .then(comments => {
-      return Promise.all([checkIfExists(article_id), comments]);
+      return Promise.all([
+        checkIfExists("articles", "article_id", article_id),
+        comments
+      ]);
     })
     .then(([checkIfExists, comments]) => {
       if (checkIfExists === false) {
