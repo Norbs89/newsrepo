@@ -12,6 +12,11 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
+  describe("/comments", () => {
+    describe("/:comment_id", () => {
+      it("", () => {});
+    });
+  });
   describe("/topics", () => {
     it("GET:200 - Responds with an object containing an array of topics, each having 'slug' & 'description' properties", () => {
       return request(app)
@@ -57,7 +62,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/articles", () => {
+  describe("/articles", () => {
     it("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
@@ -98,6 +103,22 @@ describe("/api", () => {
           res.body.articles.forEach(articles =>
             expect(articles.topic).to.eql("mitch")
           );
+        });
+    });
+    it("GET: 400 - responds with error message when trying to sort by an invalid query", () => {
+      return request(app)
+        .get("/api/articles?sort_by=banana")
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid query");
+        });
+    });
+    it("GET: 404 - responds with error message when given a filter value that doesn't exist", () => {
+      return request(app)
+        .get("/api/articles?author=banana")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("404, Not found!");
         });
     });
     describe("/:article_id", () => {

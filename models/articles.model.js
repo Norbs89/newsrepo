@@ -83,6 +83,9 @@ const getAllArticles = query => {
       }
     })
     .then(articles => {
+      if (articles.length === 0) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      }
       return articles;
     });
 };
