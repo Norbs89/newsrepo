@@ -56,7 +56,12 @@ const getCommentsByArticleId = (query, article_id) => {
     .where("article_id", article_id)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
     .then(comments => {
-      return comments;
+      return Promise.all([checkIfExists(article_id), comments]);
+    })
+    .then(([checkIfExists, comments]) => {
+      if (checkIfExists === false) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      } else return comments;
     });
 };
 
@@ -78,6 +83,8 @@ const getAllArticles = query => {
       if (query.hasOwnProperty("author")) {
         querySoFar.where("articles.author", query.author);
       }
+    })
+    .modify(querySoFar => {
       if (query.hasOwnProperty("topic")) {
         querySoFar.where("articles.topic", query.topic);
       }
@@ -87,6 +94,18 @@ const getAllArticles = query => {
         return Promise.reject({ status: 404, msg: "404, Not found!" });
       }
       return articles;
+    });
+};
+
+const checkIfExists = article_id => {
+  return connection("articles")
+    .where("article_id", article_id)
+    .then(article => {
+      if (article.length !== 0) {
+        return true;
+      } else {
+        return false;
+      }
     });
 };
 

@@ -141,6 +141,14 @@ describe("/api", () => {
               );
             });
         });
+        it("GET: 200 - Responds with a 200 OK for the given article_id, even if the article has no comments.", () => {
+          return request(app)
+            .get("/api/articles/2/comments")
+            .expect(200)
+            .then(res => {
+              expect(res.body.comments).to.eql([]);
+            });
+        });
         it("GET: 200 - responds with all comments for the given article_id, ordered by user specified query", () => {
           return request(app)
             .get("/api/articles/1/comments?order=asc")
@@ -158,6 +166,14 @@ describe("/api", () => {
             .expect(400)
             .then(res => {
               expect(res.body.msg).to.equal("Invalid query");
+            });
+        });
+        it("GET: 404 - Throws an error when trying to query a non-existent article_id", () => {
+          return request(app)
+            .get("/api/articles/9999/comments")
+            .expect(404)
+            .then(res => {
+              expect(res.body.msg).to.equal("404, Not found!");
             });
         });
         it("POST: 201 - Inserts both the body and the username into the comments table based on the post request, responds with the posted comment", () => {
