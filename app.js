@@ -13,8 +13,6 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 
-app.use("/*", send405Error);
-
 app.use(customErrors);
 app.use(pSQLErrors);
 app.use("/*", send404Error);
