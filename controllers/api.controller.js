@@ -1,7 +1,7 @@
 const endpoints = require("../endpoints.json");
 
-const sendEndPoints = () => {
-  return { endpoints };
+const sendEndPoints = (req, res) => {
+  res.send(endpoints);
 };
 
 module.exports = sendEndPoints;

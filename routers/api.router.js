@@ -16,6 +16,5 @@ apiRouter
   .get(sendEndPoints)
   .all(send405Error);
 apiRouter.use("/*", send404Error);
-apiRouter.all(send405Error);
 
 module.exports = apiRouter;
