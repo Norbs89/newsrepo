@@ -2,8 +2,10 @@ const connection = require("../db/connection");
 
 const fetchArticleById = article_id => {
   return connection("comments")
-    .join("articles", "comments.article_id", "=", "articles.article_id")
+    .leftJoin("articles", "comments.article_id", "=", "articles.article_id")
     .where("articles.article_id", article_id)
+    .groupBy("articles.article_id")
+    .count({ comment_count: "comments.article_id" })
     .select(
       "articles.article_id",
       "articles.author",
@@ -17,10 +19,7 @@ const fetchArticleById = article_id => {
       if (commentsAndArticles.length === 0) {
         return Promise.reject({ status: 404, msg: "404, Not found!" });
       } else {
-        commentsAndArticles.forEach(
-          obj => (obj.comment_count = commentsAndArticles.length)
-        );
-        return commentsAndArticles;
+        return commentsAndArticles[0];
       }
     });
 };
@@ -31,12 +30,12 @@ const patchVotes = (article_id, count) => {
   }
   return connection("articles")
     .where("article_id", article_id)
-    .increment("votes", count)
+    .increment("votes", count || 0)
     .returning("*")
     .then(article => {
       if (article.length === 0) {
         return Promise.reject({ status: 404, msg: "404, Not found!" });
-      } else return article;
+      } else return article[0];
     });
 };
 
@@ -70,7 +69,7 @@ const getCommentsByArticleId = (query, article_id) => {
 
 const getAllArticles = query => {
   return connection("articles")
-    .join("comments", "comments.article_id", "=", "articles.article_id") //leftjoin here?
+    .leftJoin("comments", "comments.article_id", "=", "articles.article_id") //leftjoin here?
     .groupBy("articles.article_id")
     .select(
       "articles.author",

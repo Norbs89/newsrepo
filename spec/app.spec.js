@@ -12,7 +12,7 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
-  it.only("Responds with a JSON describing all endpoints on API", () => {
+  it("Responds with a JSON describing all endpoints on API", () => {
     request(app)
       .get("/api")
       .expect(200)
@@ -69,7 +69,7 @@ describe("/api", () => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
-      it.only("DELETE: 202 - Delete a comment specified by the parameter(comment_id)", () => {
+      it("DELETE: 202 - Delete a comment specified by the parameter(comment_id)", () => {
         return request(app)
           .delete("/api/comments/1")
           .expect(202)
@@ -77,7 +77,7 @@ describe("/api", () => {
             expect(res.body.msg).to.equal("Delete request successful");
           });
       });
-      it.only("DELETE: 404 - Throws an error when trying to delete a non existent comment", () => {
+      it("DELETE: 404 - Throws an error when trying to delete a non existent comment", () => {
         return request(app)
           .delete("/api/comments/99999")
           .expect(404)
@@ -133,6 +133,66 @@ describe("/api", () => {
     });
   });
   describe("/articles", () => {
+    it("GET: 200 - Responds with all articles,by default it's sorted by date, ordered by descending order", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.articles[0]).to.contain.keys(
+            "author",
+            "title",
+            "article_id",
+            "topic",
+            "created_at",
+            "votes",
+            "comment_count"
+          );
+          expect(res.body.articles).to.be.sortedBy("created_at", {
+            descending: true
+          });
+        });
+    });
+    it("GET: 200 - Responds with all articles, sorted by author, ordered by descending order", () => {
+      return request(app)
+        .get("/api/articles?sort_by=author")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.articles[0]).to.contain.keys(
+            "author",
+            "title",
+            "article_id",
+            "topic",
+            "created_at",
+            "votes",
+            "comment_count"
+          );
+          expect(res.body.articles).to.be.sortedBy("author", {
+            descending: true
+          });
+        });
+    });
+    it("GET: 200 - Responds with all articles, ordered by ascending order", () => {
+      return request(app)
+        .get("/api/articles?order=asc")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.articles[0]).to.contain.keys(
+            "author",
+            "title",
+            "article_id",
+            "topic",
+            "created_at",
+            "votes",
+            "comment_count"
+          );
+          expect(res.body.articles).to.be.sortedBy("created_at", {
+            descending: false
+          });
+        });
+    });
     it("GET: 200 - Responds with all articles with added 'comment_count' key-value pair. It can accept queries", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
@@ -322,7 +382,7 @@ describe("/api", () => {
           .get("/api/articles/1")
           .then(res => {
             expect(res.body).to.be.an("object");
-            expect(res.body.article[0]).to.contain.keys(
+            expect(res.body.article).to.contain.keys(
               "article_id",
               "author",
               "title",
@@ -332,7 +392,7 @@ describe("/api", () => {
               "votes",
               "comment_count"
             );
-            expect(res.body.article[0].article_id).to.equal(1);
+            expect(res.body.article.article_id).to.equal(1);
           });
       });
       it("GET: 400 - responds with error message when the requested article_id input is an invalid input type", () => {
@@ -358,7 +418,7 @@ describe("/api", () => {
           .expect(200)
           .then(res => {
             expect(res.body).to.be.an("object");
-            expect(res.body.article[0].votes).to.equal(110);
+            expect(res.body.article.votes).to.equal(110);
           });
       });
       it("PATCH:200 - the request works for negative numbers too", () => {
@@ -368,7 +428,7 @@ describe("/api", () => {
           .expect(200)
           .then(res => {
             expect(res.body).to.be.an("object");
-            expect(res.body.article[0].votes).to.equal(90);
+            expect(res.body.article.votes).to.equal(90);
           });
       });
       it("PATCH: 400 - Throws an error when the patch request has an invalid value", () => {
