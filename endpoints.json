@@ -116,9 +116,6 @@
   "DELETE /api/comments/:comment_id": {
     "description": "deletes the specified comment",
     "queries": [],
-    "exampleResponse": {
-      "no response on body, just a 204 status code sent"
-      }
-    }
+    "exampleResponse": "no response, just a 204 status sent back"
   }
 }

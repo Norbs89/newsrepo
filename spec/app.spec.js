@@ -422,6 +422,24 @@ describe("/api", () => {
             expect(res.body.article.article_id).to.equal(1);
           });
       });
+      it("GET: 200 - Responds with an article object for an article that has 0 comments as well", () => {
+        return request(app)
+          .get("/api/articles/2")
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.article).to.contain.keys(
+              "article_id",
+              "author",
+              "title",
+              "body",
+              "topic",
+              "created_at",
+              "votes",
+              "comment_count"
+            );
+            expect(res.body.article.article_id).to.equal(2);
+          });
+      });
       it("GET: 400 - responds with error message when the requested article_id input is an invalid input type", () => {
         return request(app)
           .get("/api/articles/notAnArticleId")

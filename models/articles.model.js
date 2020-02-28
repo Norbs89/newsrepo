@@ -1,23 +1,44 @@
 const connection = require("../db/connection");
 
 const fetchArticleById = article_id => {
-  return connection("comments")
-    .leftJoin("articles", "comments.article_id", "=", "articles.article_id")
-    .where("articles.article_id", article_id)
-    .groupBy("articles.article_id")
-    .count({ comment_count: "comments.article_id" })
-    .select(
-      "articles.article_id",
-      "articles.author",
-      "title",
-      "articles.body",
-      "topic",
-      "articles.created_at",
-      "articles.votes"
-    )
+  return Promise.all([
+    checkIfExists("comments", "article_id", article_id),
+    article_id
+  ])
+    .then(([checkIfExists, article_id]) => {
+      if (checkIfExists === true) {
+        return connection("comments")
+          .leftJoin(
+            "articles",
+            "comments.article_id",
+            "=",
+            "articles.article_id"
+          )
+          .where("articles.article_id", article_id)
+          .groupBy("articles.article_id")
+          .count({ comment_count: "comments.article_id" })
+          .select(
+            "articles.article_id",
+            "articles.author",
+            "title",
+            "articles.body",
+            "topic",
+            "articles.created_at",
+            "articles.votes"
+          );
+      } else {
+        return connection("articles")
+          .where("article_id", article_id)
+          .select("*");
+      }
+    })
     .then(commentsAndArticles => {
       if (commentsAndArticles.length === 0) {
         return Promise.reject({ status: 404, msg: "404, Not found!" });
+      }
+      if (!commentsAndArticles[0].hasOwnProperty("comment_count")) {
+        commentsAndArticles[0].comment_count = 0;
+        return commentsAndArticles[0];
       } else {
         return commentsAndArticles[0];
       }
