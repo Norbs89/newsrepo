@@ -29,7 +29,17 @@ describe("/api", () => {
           .expect(200)
           .then(res => {
             expect(res.body).to.be.an("object");
-            expect(res.body.comment[0].votes).to.equal(26);
+            expect(res.body.comment.votes).to.equal(26);
+          });
+      });
+      it("PATCH: 200 - Ignore the patch request that has no information in the request body and send back the unchanged article", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({})
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.comment.votes).to.equal(16);
           });
       });
       it("PATCH:200 - the request works for negative numbers too", () => {
@@ -39,7 +49,7 @@ describe("/api", () => {
           .expect(200)
           .then(res => {
             expect(res.body).to.be.an("object");
-            expect(res.body.comment[0].votes).to.equal(4);
+            expect(res.body.comment.votes).to.equal(4);
           });
       });
       it("PATCH: 400 - Throws an error when the patch request has an invalid value", () => {
@@ -69,13 +79,10 @@ describe("/api", () => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
-      it("DELETE: 202 - Delete a comment specified by the parameter(comment_id)", () => {
+      it("DELETE: 204 - Delete a comment specified by the parameter(comment_id)", () => {
         return request(app)
           .delete("/api/comments/1")
-          .expect(202)
-          .then(res => {
-            expect(res.body.msg).to.equal("Delete request successful");
-          });
+          .expect(204);
       });
       it("DELETE: 404 - Throws an error when trying to delete a non existent comment", () => {
         return request(app)
@@ -108,19 +115,19 @@ describe("/api", () => {
         });
     });
   });
-  describe("/users/:username", () => {
+  describe.only("/users/:username", () => {
     it("GET:200 - Responds with a user object which should have the following properties: username, avatar_url, name", () => {
       return request(app)
         .get("/api/users/icellusedkars")
         .expect(200)
         .then(res => {
           expect(res.body).to.be.an("object");
-          expect(res.body.user[0]).to.contain.keys(
+          expect(res.body.user).to.contain.keys(
             "username",
             "avatar_url",
             "name"
           );
-          expect("icellusedkars").to.equal(res.body.user[0].username);
+          expect("icellusedkars").to.equal(res.body.user.username);
         });
     });
     it("GET: 404 - responds with error message when given a username that doesn't exist", () => {
@@ -332,7 +339,15 @@ describe("/api", () => {
             .expect(201)
             .then(res => {
               expect(res.body).to.be.an("object");
-              expect(res.body).to.eql({ comment: "test comment" });
+              expect(res.body.comment).to.have.keys(
+                "comment_id",
+                "author",
+                "article_id",
+                "votes",
+                "created_at",
+                "body"
+              );
+              expect(res.body.comment.body).to.eql("test comment");
             });
         });
         it("POST: 400 - Throws an error when the new comment request has an undefined value", () => {
@@ -374,6 +389,18 @@ describe("/api", () => {
               expect(res.body.msg).to.equal(
                 "Value is missing or invalid data type"
               );
+            });
+        });
+        it("POST: 404 - Throws an error when trying to submit a comment to a non-existent article", () => {
+          return request(app)
+            .post("/api/articles/9999/comments")
+            .send({
+              username: "icellusedkars",
+              body: "test comment"
+            })
+            .expect(404)
+            .then(res => {
+              expect(res.body.msg).to.equal("404, Not found!");
             });
         });
       });
@@ -456,6 +483,16 @@ describe("/api", () => {
           .expect(400)
           .then(res => {
             expect(res.body.msg).to.equal("Invalid request");
+          });
+      });
+      it("PATCH: 200 - Ignore the patch request that has no information in the request body and send back the unchanged article", () => {
+        return request(app)
+          .patch("/api/articles/1")
+          .send({})
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.be.an("object");
+            expect(res.body.article.votes).to.equal(100);
           });
       });
     });

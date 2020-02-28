@@ -19,7 +19,7 @@ const getArticleById = (req, res, next) => {
 
 const changeVotes = (req, res, next) => {
   const article_id = req.params.article_id;
-  const count = req.body.inc_votes;
+  const count = req.body;
   patchVotes(article_id, count)
     .then(article => {
       res.status(200).send({ article });
@@ -35,7 +35,9 @@ const postComment = (req, res, next) => {
     body: req.body.body,
     article_id: req.params.article_id
   };
-  addComment(comment)
+  const article_id = req.params.article_id;
+
+  addComment(comment, article_id)
     .then(comment => {
       res.status(201).send({ comment });
     })

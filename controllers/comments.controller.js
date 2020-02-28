@@ -5,7 +5,7 @@ const {
 
 const sendUpdatedComment = (req, res, next) => {
   const comment_id = req.params.comment_id;
-  const votes = req.body.inc_votes;
+  const votes = req.body;
   changeCommentVote(votes, comment_id)
     .then(comment => {
       res.send({ comment });
@@ -18,7 +18,7 @@ const sendUpdatedComment = (req, res, next) => {
 const deleteComment = (req, res, next) => {
   removeCommentbyId(req.params.comment_id)
     .then(message => {
-      res.status(202).send(message);
+      res.status(204).send();
     })
     .catch(err => {
       next(err);
