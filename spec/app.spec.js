@@ -115,7 +115,7 @@ describe("/api", () => {
         });
     });
   });
-  describe.only("/users/:username", () => {
+  describe("/users/:username", () => {
     it("GET:200 - Responds with a user object which should have the following properties: username, avatar_url, name", () => {
       return request(app)
         .get("/api/users/icellusedkars")

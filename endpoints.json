@@ -25,52 +25,100 @@
     }
   },
   "GET /api/users/:username": {
-    "description": "serves an array of requested user's details",
+    "description": "serves an object of requested user's details",
     "queries": [],
     "exampleResponse": {
-      "user": [
-        {
-          "username": "username",
-          "avatar_url": "www.prettyimages.com",
-          "name": "John Doe"
-        }
-      ]
+      "user": {
+        "username": "icellusedkars",
+        "avatar_url": "https: //avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+        "name": "sam"
+      }
     }
   },
   "GET /api/articles/:article_id": {
     "description": "serves an array of a requested article's details",
     "queries": [],
     "exampleResponse": {
-      "article": [
-        {
-          "article_id": 1,
-          "author": "username",
-          "title": "title",
-          "body": "article",
-          "topic": "slug",
-          "created_at": "date",
-          "votes": 0,
-          "comment_count": 0
-        }
-      ]
+      "article": {
+        "comment_count": "13",
+        "article_id": 1,
+        "author": "butter_bridge",
+        "title": "Living in the shadow of a great man",
+        "body": "I find this existence challenging",
+        "topic": "mitch",
+        "created_at": "2018-11-15T12: 21: 54.171Z",
+        "votes": 100
+      }
     }
   },
   "PATCH /api/articles/:article_id": {
-    "description": "updates the vote count by sending a body: {inc_votes: newVote}",
+    "description": "updates the vote count by sending a body: {inc_votes: newVote(example newVote = 10)}",
     "queries": [],
     "exampleResponse": {
-      "article": [
+      "article": {
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "body": "I find this existence challenging",
+        "votes": 110,
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "created_at": "2018-11-15T12: 21: 54.171Z"
+      }
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new comment to the specified article",
+    "body sent": {
+      "username": "icellusedkars",
+      "body": "test comment"
+    },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 19,
+        "author": "icellusedkars",
+        "article_id": 1,
+        "votes": 0,
+        "created_at": "2020-02-28T11: 40: 08.725Z",
+        "body": "test comment"
+      }
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "get all comments back from the requested article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
         {
-          "article_id": 1,
-          "author": "username",
-          "title": "title",
-          "body": "article",
-          "topic": "slug",
-          "created_at": "date",
-          "votes": "(+ or - newVote)",
-          "comment_count": 0
-        }
+          "comment_id": 13,
+          "votes": 0,
+          "created_at": "2005-11-25T12: 36: 03.389Z",
+          "author": "icellusedkars",
+          "body": "Fruit pastilles"
+        },
+        "all other comments..."
       ]
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "updates the vote count by sending a body: {inc_votes: newVote(example newVote = 10)}",
+    "queries": [],
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 1,
+        "author": "butter_bridge",
+        "article_id": 9,
+        "votes": 26,
+        "created_at": "2017-11-22T12: 36: 03.389Z",
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the specified comment",
+    "queries": [],
+    "exampleResponse": {
+      "no response on body, just a 204 status code sent"
+      }
     }
   }
 }
