@@ -3,7 +3,8 @@ const {
   patchVotes,
   addComment,
   getCommentsByArticleId,
-  getAllArticles
+  getAllArticles,
+  addArticle
 } = require("../models/articles.model");
 
 const getArticleById = (req, res, next) => {
@@ -69,10 +70,22 @@ const sendAllArticles = (req, res, next) => {
     });
 };
 
+const postArticle = (req, res, next) => {
+  addArticle(req.body)
+    .then(article => {
+      console.log({ article });
+      res.status(201).send({ article });
+    })
+    .catch(err => {
+      next(err);
+    });
+};
+
 module.exports = {
   getArticleById,
   changeVotes,
   postComment,
   sendCommentsByArticleId,
-  sendAllArticles
+  sendAllArticles,
+  postArticle
 };

@@ -3,7 +3,8 @@ const {
   changeVotes,
   postComment,
   sendCommentsByArticleId,
-  sendAllArticles
+  sendAllArticles,
+  postArticle
 } = require("../controllers/articles.controller");
 const { send405Error, send404Error } = require("../errors/errors");
 
@@ -12,6 +13,7 @@ const articlesRouter = require("express").Router();
 articlesRouter
   .route("/")
   .get(sendAllArticles)
+  .post(postArticle)
   .all(send405Error);
 
 articlesRouter

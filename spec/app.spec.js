@@ -274,6 +274,77 @@ describe("/api", () => {
           expect(res.body.articles).to.eql([]);
         });
     });
+    it("POST: 201 - Posts a new article with the correct key value pairs.", () => {
+      return request(app)
+        .post("/api/articles")
+        .send({
+          title: "A new article",
+          body: "test article posted",
+          topic: "mitch",
+          author: "icellusedkars"
+        })
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.article).to.have.keys(
+            "article_id",
+            "author",
+            "title",
+            "topic",
+            "votes",
+            "created_at",
+            "body"
+          );
+          expect(res.body.article.body).to.eql("test article posted");
+        });
+    });
+    it("POST: 400 - Throws an error when the new article request has an undefined value", () => {
+      return request(app)
+        .post("/api/articles")
+        .send({
+          title: undefined,
+          body: "test article posted",
+          topic: "mitch",
+          author: "icellusedkars"
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
+    it("POST: 400 - Throws an error when the new article has an invalid value", () => {
+      return request(app)
+        .post("/api/articles")
+        .send({
+          title: "NEW ARTICLE",
+          body: "test article posted",
+          topic: "mitch",
+          author: "NotAValidUser"
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
+    it("POST: 400 - Throws an error when the new article has a missing key", () => {
+      return request(app)
+        .post("/api/articles")
+        .send({
+          title: "NEW ARTICLE",
+          body: "test article posted",
+          topic: "mitch"
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
     describe("/:article_id", () => {
       describe("/comments", () => {
         it("GET: 200 - Responds with all comments for the given article_id. Can accept queries - be sorted by any column as well as order by asc or desc(default)", () => {

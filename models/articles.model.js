@@ -82,6 +82,16 @@ const addComment = (comment, article_id) => {
   });
 };
 
+const addArticle = article => {
+  return connection
+    .insert(article)
+    .into("articles")
+    .returning("*")
+    .then(postedArticle => {
+      return postedArticle[0];
+    });
+};
+
 const getCommentsByArticleId = (query, article_id) => {
   return connection("comments")
     .select("comment_id", "votes", "created_at", "author", "body")
@@ -164,5 +174,6 @@ module.exports = {
   patchVotes,
   addComment,
   getCommentsByArticleId,
-  getAllArticles
+  getAllArticles,
+  addArticle
 };
