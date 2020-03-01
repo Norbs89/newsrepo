@@ -584,6 +584,19 @@ describe("/api", () => {
             expect(res.body.article.votes).to.equal(100);
           });
       });
+      it("DELETE: 204 - Delete an article specified by the parameter(article_id)", () => {
+        return request(app)
+          .delete("/api/articles/3")
+          .expect(204);
+      });
+      it("DELETE: 404 - Throws an error when trying to delete a non existent article", () => {
+        return request(app)
+          .delete("/api/articles/99999")
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal("404, Not found!");
+          });
+      });
     });
   });
   describe("Invalid Path", () => {

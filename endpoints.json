@@ -137,5 +137,10 @@
     "description": "deletes the specified comment",
     "queries": [],
     "exampleResponse": "no response, just a 204 status sent back"
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "deletes the specified article",
+    "queries": [],
+    "exampleResponse": "no response, just a 204 status sent back"
   }
 }

@@ -4,7 +4,8 @@ const {
   postComment,
   sendCommentsByArticleId,
   sendAllArticles,
-  postArticle
+  postArticle,
+  deleteArticle
 } = require("../controllers/articles.controller");
 const { send405Error, send404Error } = require("../errors/errors");
 
@@ -20,6 +21,7 @@ articlesRouter
   .route("/:article_id")
   .get(getArticleById)
   .patch(changeVotes)
+  .delete(deleteArticle)
   .all(send405Error);
 
 articlesRouter

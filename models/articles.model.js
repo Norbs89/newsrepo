@@ -154,6 +154,17 @@ const getAllArticles = query => {
     });
 };
 
+const removeArticlebyId = article_id => {
+  return connection("articles")
+    .where("article_id", article_id)
+    .del()
+    .then(body => {
+      if (body === 0) {
+        return Promise.reject({ status: 404, msg: "404, Not found!" });
+      }
+    });
+};
+
 const checkIfExists = (table, column, value) => {
   if (value === undefined) {
     return true;
@@ -175,5 +186,6 @@ module.exports = {
   addComment,
   getCommentsByArticleId,
   getAllArticles,
-  addArticle
+  addArticle,
+  removeArticlebyId
 };
