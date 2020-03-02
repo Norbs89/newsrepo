@@ -9,6 +9,19 @@
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+  "POST /api/topics": {
+    "description": "posts a new topic based on the body sent",
+    "body sent": {
+      "slug": "a new topic",
+      "description": "test topic posted"
+    },
+    "exampleResponse": {
+      "topic": {
+        "slug": "a new topic",
+        "description": "test topic posted"
+      }
+    }
+  },
   "GET /api/articles": {
     "description": "serves an array of all topics",
     "queries": ["author", "topic", "sort_by", "order"],

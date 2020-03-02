@@ -106,6 +106,61 @@ describe("/api", () => {
           });
         });
     });
+    it("POST: 201 - Posts a new topic with the correct key value pairs.", () => {
+      return request(app)
+        .post("/api/topics")
+        .send({
+          slug: "A new topic",
+          description: "test topic posted"
+        })
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an("object");
+          expect(res.body.topic).to.have.keys("slug", "description");
+          expect(res.body.topic.description).to.eql("test topic posted");
+        });
+    });
+    it("POST: 400 - Throws an error when the new topic request has an undefined value", () => {
+      return request(app)
+        .post("/api/topics")
+        .send({
+          slug: undefined,
+          description: "test topic posted"
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
+    it("POST: 400 - Throws an error when the new topic has an invalid value", () => {
+      return request(app)
+        .post("/api/topics")
+        .send({
+          slug: "A new topic",
+          description: null
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
+    it("POST: 400 - Throws an error when the new topic has a missing key", () => {
+      return request(app)
+        .post("/api/topics")
+        .send({
+          slug: "A new topic"
+        })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal(
+            "Value is missing or invalid data type"
+          );
+        });
+    });
     it("405 Not Allowed - sends a 405 status error when trying to use invalid methods", () => {
       return request(app)
         .delete("/api/topics")

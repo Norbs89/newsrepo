@@ -8,4 +8,14 @@ const fetchAllTopics = () => {
     });
 };
 
-module.exports = fetchAllTopics;
+const addTopic = topic => {
+  return connection
+    .insert(topic)
+    .into("topics")
+    .returning("*")
+    .then(postedTopic => {
+      return postedTopic[0];
+    });
+};
+
+module.exports = { fetchAllTopics, addTopic };
