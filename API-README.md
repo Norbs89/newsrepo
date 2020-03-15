@@ -2,6 +2,8 @@
 
 Full API back-end setup for my NC-News website, including seeding, migrations, routing, data formatting, error handling and various API endpoints. Created by TDD.
 
+For all available enpoints and to interact with the database, please see https://nc-news-hosting-app.herokuapp.com/api .
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
