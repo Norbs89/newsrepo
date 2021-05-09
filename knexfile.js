@@ -5,23 +5,26 @@ const { dbDevConfig, dbTestConfig } = require("./dbConfig");
 const baseConfig = {
   client: "pg",
   migrations: {
-    directory: "./db/migrations"
+    directory: "./db/migrations",
   },
   seeds: {
-    directory: "./db/seeds"
-  }
+    directory: "./db/seeds",
+  },
 };
 
 const customConfig = {
   development: {
-    connection: dbDevConfig
+    connection: dbDevConfig,
   },
   test: {
-    connection: dbTestConfig
+    connection: dbTestConfig,
   },
   production: {
-    connection: `${DB_URL}?ssl=true`
-  }
+    connection: `${DB_URL}?ssl=true`,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
 };
 
 module.exports = { ...customConfig[ENV], ...baseConfig };
