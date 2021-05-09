@@ -18,8 +18,7 @@ describe("/api", () => {
       .expect(200)
       .then((res) => {
         expect(res).to.be.an("object");
-      })
-      .catch(done);
+      });
   });
   describe("/comments", () => {
     describe("/:comment_id", () => {

@@ -1,4 +1,4 @@
-// const { DB_URL } = process.env;
+const { DB_URL } = process.env;
 const ENV = process.env.NODE_ENV || "development";
 const { dbDevConfig, dbTestConfig } = require("./dbConfig");
 
@@ -26,9 +26,11 @@ const customConfig = {
     },
   },
   production: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
   },
 };
