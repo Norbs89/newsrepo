@@ -15,14 +15,22 @@ const baseConfig = {
 const customConfig = {
   development: {
     connection: dbDevConfig,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
   test: {
     connection: dbTestConfig,
-  },
-  production: {
-    connection: `${DB_URL}?ssl=true`,
     ssl: {
       rejectUnauthorized: false,
+    },
+  },
+  production: {
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
   },
 };

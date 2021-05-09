@@ -1,9 +1,21 @@
 const ENV = process.env.NODE_ENV || "development";
 
+// if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
+//   throw new Error("PGDATABASE or DATABASE_URL not set");
+// }
+
 const knex = require("knex");
 const dbConfig =
   ENV === "production"
-    ? { client: "pg", connection: process.env.DATABASE_URL }
+    ? {
+        client: "pg",
+        connection: {
+          connectionString: process.env.DATABASE_URL,
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
+      }
     : require("../knexfile");
 const connection = knex(dbConfig);
 

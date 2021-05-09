@@ -16,7 +16,7 @@ describe("/api", () => {
     request(app)
       .get("/api")
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res).to.be.an("object");
       });
   });
@@ -27,7 +27,7 @@ describe("/api", () => {
           .patch("/api/comments/1")
           .send({ inc_votes: 10 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.comment.votes).to.equal(26);
           });
@@ -37,7 +37,7 @@ describe("/api", () => {
           .patch("/api/comments/1")
           .send({})
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.comment.votes).to.equal(16);
           });
@@ -47,7 +47,7 @@ describe("/api", () => {
           .patch("/api/comments/2")
           .send({ inc_votes: -10 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.comment.votes).to.equal(4);
           });
@@ -57,7 +57,7 @@ describe("/api", () => {
           .patch("/api/comments/1")
           .send({ inc_votes: "banana" })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
@@ -66,7 +66,7 @@ describe("/api", () => {
           .patch("/api/comments/99999")
           .send({ inc_votes: 15 })
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("404, Not found!");
           });
       });
@@ -75,20 +75,18 @@ describe("/api", () => {
           .patch("/api/comments/1")
           .send({ body: 15 })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
       it("DELETE: 204 - Delete a comment specified by the parameter(comment_id)", () => {
-        return request(app)
-          .delete("/api/comments/1")
-          .expect(204);
+        return request(app).delete("/api/comments/1").expect(204);
       });
       it("DELETE: 404 - Throws an error when trying to delete a non existent comment", () => {
         return request(app)
           .delete("/api/comments/99999")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("404, Not found!");
           });
       });
@@ -99,9 +97,9 @@ describe("/api", () => {
       return request(app)
         .get("/api/topics")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
-          res.body.topics.forEach(topic => {
+          res.body.topics.forEach((topic) => {
             expect(topic).to.contain.keys("slug", "description");
           });
         });
@@ -111,10 +109,10 @@ describe("/api", () => {
         .post("/api/topics")
         .send({
           slug: "A new topic",
-          description: "test topic posted"
+          description: "test topic posted",
         })
         .expect(201)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.topic).to.have.keys("slug", "description");
           expect(res.body.topic.description).to.eql("test topic posted");
@@ -125,10 +123,10 @@ describe("/api", () => {
         .post("/api/topics")
         .send({
           slug: undefined,
-          description: "test topic posted"
+          description: "test topic posted",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -139,10 +137,10 @@ describe("/api", () => {
         .post("/api/topics")
         .send({
           slug: "A new topic",
-          description: null
+          description: null,
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -152,10 +150,10 @@ describe("/api", () => {
       return request(app)
         .post("/api/topics")
         .send({
-          slug: "A new topic"
+          slug: "A new topic",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -165,7 +163,7 @@ describe("/api", () => {
       return request(app)
         .delete("/api/topics")
         .expect(405)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal("Method not allowed!");
         });
     });
@@ -175,7 +173,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/users/icellusedkars")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.user).to.contain.keys(
             "username",
@@ -189,7 +187,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/users/clearlyAWrongUsername")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal("404, Not found!");
         });
     });
@@ -199,7 +197,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.articles[0]).to.contain.keys(
             "author",
@@ -211,7 +209,7 @@ describe("/api", () => {
             "comment_count"
           );
           expect(res.body.articles).to.be.sortedBy("created_at", {
-            descending: true
+            descending: true,
           });
         });
     });
@@ -219,7 +217,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?sort_by=author")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.articles[0]).to.contain.keys(
             "author",
@@ -231,7 +229,7 @@ describe("/api", () => {
             "comment_count"
           );
           expect(res.body.articles).to.be.sortedBy("author", {
-            descending: true
+            descending: true,
           });
         });
     });
@@ -239,7 +237,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?order=asc")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.articles[0]).to.contain.keys(
             "author",
@@ -251,7 +249,7 @@ describe("/api", () => {
             "comment_count"
           );
           expect(res.body.articles).to.be.sortedBy("created_at", {
-            descending: false
+            descending: false,
           });
         });
     });
@@ -259,7 +257,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?sort_by=votes")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.articles[0]).to.contain.keys(
             "author",
@@ -271,7 +269,7 @@ describe("/api", () => {
             "comment_count"
           );
           expect(res.body.articles).to.be.sortedBy("votes", {
-            descending: true
+            descending: true,
           });
         });
     });
@@ -279,9 +277,9 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?author=butter_bridge")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
-          res.body.articles.forEach(articles =>
+          res.body.articles.forEach((articles) =>
             expect(articles.author).to.eql("butter_bridge")
           );
         });
@@ -290,9 +288,9 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?topic=mitch")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
-          res.body.articles.forEach(articles =>
+          res.body.articles.forEach((articles) =>
             expect(articles.topic).to.eql("mitch")
           );
         });
@@ -301,7 +299,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?sort_by=banana")
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal("Invalid query");
         });
     });
@@ -309,7 +307,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?author=banana")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal("404, Not found!");
         });
     });
@@ -317,7 +315,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?author=lurker")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.articles).to.eql([]);
         });
     });
@@ -325,7 +323,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/articles?topic=paper")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.articles).to.eql([]);
         });
     });
@@ -336,10 +334,10 @@ describe("/api", () => {
           title: "A new article",
           body: "test article posted",
           topic: "mitch",
-          author: "icellusedkars"
+          author: "icellusedkars",
         })
         .expect(201)
-        .then(res => {
+        .then((res) => {
           expect(res.body).to.be.an("object");
           expect(res.body.article).to.have.keys(
             "article_id",
@@ -360,10 +358,10 @@ describe("/api", () => {
           title: undefined,
           body: "test article posted",
           topic: "mitch",
-          author: "icellusedkars"
+          author: "icellusedkars",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -376,10 +374,10 @@ describe("/api", () => {
           title: "NEW ARTICLE",
           body: "test article posted",
           topic: "mitch",
-          author: "NotAValidUser"
+          author: "NotAValidUser",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -391,10 +389,10 @@ describe("/api", () => {
         .send({
           title: "NEW ARTICLE",
           body: "test article posted",
-          topic: "mitch"
+          topic: "mitch",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal(
             "Value is missing or invalid data type"
           );
@@ -406,10 +404,10 @@ describe("/api", () => {
           return request(app)
             .get("/api/articles/1/comments?sort_by=author")
             .expect(200)
-            .then(res => {
+            .then((res) => {
               expect(res.body).to.be.an("object");
               expect(res.body.comments).to.be.sortedBy("author", {
-                descending: true
+                descending: true,
               });
               expect(res.body.comments[0]).to.contain.keys(
                 "comment_id",
@@ -424,7 +422,7 @@ describe("/api", () => {
           return request(app)
             .get("/api/articles/2/comments")
             .expect(200)
-            .then(res => {
+            .then((res) => {
               expect(res.body.comments).to.eql([]);
             });
         });
@@ -432,10 +430,10 @@ describe("/api", () => {
           return request(app)
             .get("/api/articles/1/comments?order=asc")
             .expect(200)
-            .then(res => {
+            .then((res) => {
               expect(res.body).to.be.an("object");
               expect(res.body.comments).to.be.sortedBy("created_at", {
-                descending: false
+                descending: false,
               });
             });
         });
@@ -443,7 +441,7 @@ describe("/api", () => {
           return request(app)
             .get("/api/articles/1/comments?sort_by=banana")
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal("Invalid query");
             });
         });
@@ -451,7 +449,7 @@ describe("/api", () => {
           return request(app)
             .get("/api/articles/9999/comments")
             .expect(404)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal("404, Not found!");
             });
         });
@@ -460,10 +458,10 @@ describe("/api", () => {
             .post("/api/articles/1/comments")
             .send({
               username: "icellusedkars",
-              body: "test comment"
+              body: "test comment",
             })
             .expect(201)
-            .then(res => {
+            .then((res) => {
               expect(res.body).to.be.an("object");
               expect(res.body.comment).to.have.keys(
                 "comment_id",
@@ -481,10 +479,10 @@ describe("/api", () => {
             .post("/api/articles/1/comments")
             .send({
               username: undefined,
-              body: "test comment"
+              body: "test comment",
             })
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal(
                 "Value is missing or invalid data type"
               );
@@ -495,10 +493,10 @@ describe("/api", () => {
             .post("/api/articles/1/comments")
             .send({
               username: "notValidUser",
-              body: "test comment"
+              body: "test comment",
             })
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal(
                 "Value is missing or invalid data type"
               );
@@ -508,10 +506,10 @@ describe("/api", () => {
           return request(app)
             .post("/api/articles/1/comments")
             .send({
-              username: "icellusedkars"
+              username: "icellusedkars",
             })
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal(
                 "Value is missing or invalid data type"
               );
@@ -522,10 +520,10 @@ describe("/api", () => {
             .post("/api/articles/9999/comments")
             .send({
               username: "icellusedkars",
-              body: "test comment"
+              body: "test comment",
             })
             .expect(404)
-            .then(res => {
+            .then((res) => {
               expect(res.body.msg).to.equal("404, Not found!");
             });
         });
@@ -533,7 +531,7 @@ describe("/api", () => {
       it("GET: 200 - Responds with an article object with all article tables as properties plus an added 'comment_count' property that comes from comments", () => {
         return request(app)
           .get("/api/articles/1")
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.article).to.contain.keys(
               "article_id",
@@ -551,7 +549,7 @@ describe("/api", () => {
       it("GET: 200 - Responds with an article object for an article that has 0 comments as well", () => {
         return request(app)
           .get("/api/articles/2")
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.article).to.contain.keys(
               "article_id",
@@ -570,7 +568,7 @@ describe("/api", () => {
         return request(app)
           .get("/api/articles/notAnArticleId")
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
@@ -578,7 +576,7 @@ describe("/api", () => {
         return request(app)
           .get("/api/articles/99999")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("404, Not found!");
           });
       });
@@ -587,7 +585,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: 10 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.article.votes).to.equal(110);
           });
@@ -597,7 +595,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: -10 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.article.votes).to.equal(90);
           });
@@ -607,7 +605,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: "banana" })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
@@ -616,7 +614,7 @@ describe("/api", () => {
           .patch("/api/articles/9999")
           .send({ inc_votes: 15 })
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("404, Not found!");
           });
       });
@@ -625,7 +623,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ topic: 15 })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("Invalid request");
           });
       });
@@ -634,21 +632,19 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({})
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.be.an("object");
             expect(res.body.article.votes).to.equal(100);
           });
       });
       it("DELETE: 204 - Delete an article specified by the parameter(article_id)", () => {
-        return request(app)
-          .delete("/api/articles/3")
-          .expect(204);
+        return request(app).delete("/api/articles/3").expect(204);
       });
       it("DELETE: 404 - Throws an error when trying to delete a non existent article", () => {
         return request(app)
           .delete("/api/articles/99999")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.msg).to.equal("404, Not found!");
           });
       });
@@ -659,7 +655,7 @@ describe("/api", () => {
       return request(app)
         .get("/api/path-does-not-exist")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.msg).to.equal("Route not found!");
         });
     });
